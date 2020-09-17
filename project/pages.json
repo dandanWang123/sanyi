@@ -1,0 +1,227 @@
+{
+	"pages": [
+		// pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		// {
+		// 	"path": "pages/isc/performance/rect-index",
+		// 	"style": {
+		// 		"navigationBarTitleText": "待整改的",
+		// 		"enablePullDownRefresh": true
+		// 	}
+		// }
+		{
+		    "path" : "pages/index",
+		    "style" : {
+				"navigationBarTitleText": "三一集团"
+			}
+		},
+		{
+			"path": "pages/host",
+			"style": {
+				"navigationBarTitleText": "主机",
+				"enablePullDownRefresh": true
+			}
+		},
+		// {
+		//     "path" : "host/order/process",
+		//     "style" : {
+		// 		"navigationBarTitleText": "全流程跟踪"
+		// 	}
+		// },
+        {
+            "path" : "pages/parts",
+            "style" : {
+				"navigationBarTitleText": "配件"
+			}
+        }
+        ,{
+            "path" : "pages/mine",
+            "style" : {
+				"navigationBarTitleText": "我的"
+			}
+        },{
+			"path" : "pages/chart",
+			"style" : {
+				"navigationBarTitleText": "报表分析"
+			}
+		 }
+		// ,{
+		//     "path" : "host/order/detail",
+		//     "style" : {
+		// 		"navigationBarTitleText": "详情"
+		// 	}
+		// }
+        
+    ],
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "Hello uniapp",
+		"navigationBarBackgroundColor": "#FFFFFF",
+		"backgroundColor": "#FFFFFF",
+		"backgroundColorTop": "#F4F5F6",
+		"backgroundColorBottom": "#F4F5F6",
+		"mp-alipay": {
+			"titleBarColor": "#FFFFFF"
+		}
+	},
+	"tabBar": {
+		"color": "#7A7E83",
+		"selectedColor": "#5B82F9",
+		"borderStyle": "black",
+		"backgroundColor": "#FFFFFF",
+		"list": [{
+				"pagePath": "pages/host",
+				"iconPath": "static/img/host.png",
+				"selectedIconPath": "static/img/host-select.png",
+				"text": "主机"
+			},
+			{
+				"pagePath": "pages/parts",
+				"iconPath": "static/img/pj.png",
+				"selectedIconPath": "static/img/pj-select.png",
+				"text": "配件"
+			},
+			{
+				"pagePath": "pages/mine",
+				"iconPath": "static/img/mine.png",
+				"selectedIconPath": "static/img/mine-select.png",
+				"text": "我的"
+			}
+		]
+	},
+	
+	//分包处理
+	"subPackages": [{
+		"root": "host",
+		"pages":[{
+		"path": "order/list",
+		"style": {
+			"navigationBarTitleText": "订单查询",
+			"enablePullDownRefresh": true,
+			"onReachBottomDistance": 20
+		 }
+		},{
+		   "path": "myOrder/list",
+		   "style": {
+				"navigationBarTitleText": "我的订单",
+				"enablePullDownRefresh": true
+			}
+		},{
+		   "path": "host/list",
+		   "style": {
+				"navigationBarTitleText": "主机查询",
+				"enablePullDownRefresh": true
+			}
+		},{
+		   "path": "host/hostList",
+		   "style": {
+				"navigationBarTitleText": "主机设备列表",
+				"enablePullDownRefresh": true
+			}
+		},{
+		   "path": "order/process",
+		   "style": {
+				"navigationBarTitleText": "全流程跟踪"
+				// "enablePullDownRefresh": true
+			}
+		},
+		{
+		   "path": "order/mapTrack",
+		   "style": {
+				"navigationBarTitleText": "物流跟踪"
+				// "enablePullDownRefresh": true
+			}
+		},
+		{
+		   "path": "order/detail",
+		   "style": {
+				"navigationBarTitleText": "详情"
+				// "enablePullDownRefresh": true
+			}
+		},
+		{
+			"path": "alarm/list",
+		    "style": {
+				 "navigationBarTitleText": "告警反馈",
+				 "enablePullDownRefresh": true
+			}
+		},
+		{
+			"path": "alarm/record",
+		    "style": {
+				 "navigationBarTitleText": "告警反馈记录"
+				 // "enablePullDownRefresh": true
+			}
+		}]
+	},{
+		"root": "mine",
+		"pages":[{
+			"path": "list",
+		    "style": {
+				 "navigationBarTitleText": "我的订单",
+				 "enablePullDownRefresh": true
+			}
+		},{
+			"path": "process",
+		    "style": {
+				 "navigationBarTitleText": "全流程跟踪"
+				 // "enablePullDownRefresh": true
+			}
+		},{
+			"path": "order_detail",
+		    "style": {
+				 "navigationBarTitleText": "订单详情"
+				 // "enablePullDownRefresh": true
+			}
+		}]
+	}],
+	"preloadRule": {
+		"host/order/list": {
+			"network": "all",
+			"packages": ["host"]
+		},
+	    "host/myOrder/list": {
+			"network": "all",
+			"packages": ["host"]
+		},
+		"host/host/list": {
+			"network": "all",
+			"packages": ["host"]
+		},
+		"host/host/hostList": {
+			"network": "all",
+			"packages": ["host"]
+		},
+		"host/order/process": {
+			"network": "all",
+			"packages": ["host"]
+		},
+		"host/order/mapTrack": {
+			"network": "all",
+			"packages": ["host"]
+		},
+		"host/order/detail": {
+		   "network": "all",
+		   "packages": ["host"]
+		},
+		"host/alarm/list": {
+		    "network": "all",
+		    "packages": ["host"]
+		},
+		"host/alarm/record": {
+		    "network": "all",
+		    "packages": ["host"]
+		},
+		"mine/list": {
+		    "network": "all",
+		    "packages": ["mine"]
+		},
+		"mine/process": {
+		    "network": "all",
+		    "packages": ["mine"]
+		},
+		"mine/order_detail": {
+		    "network": "all",
+		    "packages": ["mine"]
+		}
+	 }
+}
