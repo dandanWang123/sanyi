@@ -30,21 +30,28 @@
 				})
 			},
 			getunionidSuccess() {
+				//有unionid直接调用获取token接口
 				this.hasunionid = true
+				
+				//成功获取到token再进去主页
 				setTimeout(() => {
-					uni.switchTab({
-						url: '/pages/host'
-					})
+					this.toHost()
 				}, 1800)
 			},
 			bindGetUserInfo(res) {
 				console.log(res.detail)
 				console.log(JSON.stringify(res.detail.encryptedData))
+				//没有unionid调用接口给后台加密信息，后台从中获取unionid返回token
+				
+				//成功获取到token再进去主页
 				if (res.detail.errMsg == 'getUserInfo:ok') {
-					uni.switchTab({
-						url: '/pages/host'
-					})
+					this.toHost()
 				}
+			},
+			toHost() {
+				uni.switchTab({
+					url: '/pages/host'
+				})
 			}
 		}
 	}

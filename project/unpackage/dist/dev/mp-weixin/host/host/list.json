@@ -1,0 +1,9 @@
+{
+  "navigationBarTitleText": "主机查询",
+  "enablePullDownRefresh": true,
+  "usingComponents": {
+    "uni-load-more": "/components/uni-load-more/uni-load-more",
+    "skeleton": "/components/xinyi-skeleton/skeleton",
+    "search-com": "/pages/commonCom/SearchCom"
+  }
+}

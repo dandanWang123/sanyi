@@ -25,6 +25,9 @@ Vue.prototype.$backgroundAudioData = {
 	formatedPlayTime: '00:00:00'
 }
 Vue.prototype.formatTime = function(time, formats){
+	if (time == '' || time == null) {
+		return ''
+	}
 	return moment(time).format(formats)
 }
 Vue.component('page-head', pageHead)

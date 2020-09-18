@@ -37,9 +37,6 @@
             //     'src': "url('./static/uni.ttf')"
             // });
             // #endif
-			
-			//获取字典
-			this.getDictHttp('web/order/dict/data/getListByDictType', 'sales_area')
         },
         onShow: function() {
             console.log('App Show')
@@ -48,42 +45,17 @@
             console.log('App Hide')
         },
 		methods: {
-			getDictHttp(dictUrl, dictType) {
-				var self = this
-				uni.request({
-					url: dictUrl,
-					data: {
-						dictType
-					},
-					success:res=>{
-						console.log(res.data.data)
-						if(res.data.code == 0) {
-							//成功
-							self.dicHttpSuccess(res.data.data,'sales_area_options')
-						}
-					}
-				})
-			},
-			dicHttpSuccess(data,options) {
-				this.$scope.globalData[options] = []
-				data.forEach(item => {
-					this.$scope.globalData[options].push({
-						value: item.dictValue,
-						name: item.dictLabel
-					})
-				})
-				console.log(this.$scope.globalData[options])
-			}
+
 		},
 		globalData: {  
 			/*定义全局变量，api地址，微信配置信息*/
-		    baseUrl: '',
+		    baseUrl: 'http://bsbp.sany.com.cn/gateway/web/order/',
 			/*三一的微信配置变量*/
-			// appid: 'wx1dac6509f8703123',
-			// secret: 'c43a5e66b8c3987b2f79a195ebaaf09f',
+			appid: 'wx1dac6509f8703123',
+			secret: 'c43a5e66b8c3987b2f79a195ebaaf09f',
 			/*测试用*/
-			appid: 'wx23e97e8c346936ea',
-			secret: '230bc762367e83faf849cadf1a8e00d0',
+			// appid: 'wx23e97e8c346936ea',
+			// secret: '230bc762367e83faf849cadf1a8e00d0',
 			
 			lbbsaOption: [{
 				value: '01',

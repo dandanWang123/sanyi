@@ -14,13 +14,13 @@
 					</div>
 					<div class="my_list_hd_status">
 						<span>
-							{{item.statusName}}中
+							{{item.statusName}}
 						</span>
 					</div>
 				</div>
 				<div class="my_list_content">
 					<div class="my_list_content_img">
-						<image :src="item.imgUrl" mode="aspectFill"></image>
+						<image :src="'http://'+item.imgUrl" mode="aspectFill"></image>
 					</div>
 					<div class="my_list_content_info">
 						<p>物料编码：{{item.material}}</p>
@@ -81,31 +81,7 @@
 				},
 				hasData:false,
 				showSearch:false,
-				data:[{
-					orderNum: 'T000123456',
-					status: 1,
-					model: 'T001',
-					des: '随便描述随便描述随便描述随便随便描述随便描述随便描述随便',
-					salesName: '张三',
-					salesPhone: 13813812138,
-					customerName: '李四',
-					customerPhone: 13913926675,
-					deliveryTime: 1599619299000,
-					estimateTime: 1599619299000,
-					createTime: 1599619299000
-				},{
-					orderNum: 'T000123456',
-					status: 1,
-					model: 'T002',
-					des: '随便描述随便描述随便描述随便随便描述随便描述随便描述随便',
-					salesName: '张三',
-					salesPhone: 13813812138,
-					customerName: '李四',
-					customerPhone: 13913926675,
-					deliveryTime: 1599619299000,
-					estimateTime: 1599619299000,
-					createTime: 1599619299000
-				}],
+				data:[],
 				httpQuery: {
 					pageNo: 1,
 					pageSize: 10,
@@ -147,7 +123,7 @@
 						value: '',
 					}
 				],
-				requestUrl:'web/order/app/home/order/page',
+				requestUrl:'app/home/order/page',
 				orderStart: '',
 				orderEnd: ''
 			}
@@ -202,6 +178,7 @@
 			},
 			onPullDownRefresh() {
 				this.initHttpQuery()
+				this.loadingPage = true
 				this.loadData()
 			},
 			onReachBottom() {
@@ -209,7 +186,6 @@
 				this.getmore();
 			},
 			loadData() {
-				this.loadingPage = false
 				//下拉刷新
 				let self = this;
 				//第一次回去数据
@@ -236,12 +212,13 @@
 				uni.hideLoading()
 				var self = this
 				// 数据请求
-				uni.request({
+				this.ajax({
 					url:this.requestUrl,
 					data: this.httpQuery,
 					success:res=>{
-						console.log(res.data.data)
-						var data = res.data.data
+						console.log(res)
+						var data = res.data
+						this.loadingPage = false
 						this.getListSuccess(data)
 					},
 					complete() {
@@ -275,12 +252,12 @@
 				var self = this
 				this.httpQuery.pageNo++
 				//数据更请求
-				uni.request({
+				this.ajax({
 					url:this.requestUrl,
 					data: this.httpQuery,
 					success:res=>{
-						console.log(res.data.data)
-						var data = res.data.data
+						console.log(res)
+						var data = res.data
 						this.getMoreListSuccess(data)
 					},
 					complete() {
@@ -311,6 +288,8 @@
 				this.httpQuery.type = type
 				this.httpQueryType = type
 				console.log(this.httpQuery)
+				this.loadingPage = true
+				this.data = []
 				this.loadData()
 			},
 			openCloseSearch() {
@@ -331,6 +310,8 @@
 				this.searchData = updateData
 				console.log(this.httpQuery)
 				this.openCloseSearch()
+				this.loadingPage = true
+				this.data = []
 				this.loadData()
 			},
 			goto(item) {

@@ -5,7 +5,7 @@
 			<div class="my_list" v-for="(item,i) in data" :key="i" @click="goto(item.code)">
 				<div class="my_list_content">
 					<div class="my_list_content_img">
-						<image :src="item.imgUrl" mode="aspectFill"></image>
+						<image :src="'http://'+item.imgHttpUrl" mode="aspectFill"></image>
 					</div>
 					<div class="my_list_content_info" style="margin-left: 5px;">
 						<p style="font-weight: 700;color: #333;font-size: 17px;margin-bottom: 10px;">{{item.name}}</p>
@@ -75,7 +75,7 @@
 					}
 				],
 				evePageLen: "", //后台每页返回数据的长度，用来判断是否需要请求更多
-				requestUrl:'web/order/app/home/host/page'
+				requestUrl:'app/home/host/page'
 			}
 		},
 		onLoad() {
@@ -99,6 +99,7 @@
 			},
 			onPullDownRefresh() {
 				this.initHttpQuery()
+				this.loadingPage = true
 				this.loadData()
 			},
 			onReachBottom() {
@@ -106,7 +107,6 @@
 				this.getmore();
 			},
 			loadData() {
-				this.loadingPage = false
 				//下拉刷新
 				let self = this;
 				//第一次回去数据
@@ -133,12 +133,13 @@
 				uni.hideLoading()
 				var self = this
 				// 数据请求
-				uni.request({
+				this.ajax({
 					url:this.requestUrl,
 					data: this.httpQuery,
 					success:res=>{
-						console.log(res.data.data)
-						var data = res.data.data
+						console.log(res)
+						var data = res.data
+						this.loadingPage = false
 						this.getListSuccess(data)
 					},
 					complete() {
@@ -172,12 +173,12 @@
 				var self = this
 				this.httpQuery.pageNo++
 				//数据更请求
-				uni.request({
+				this.ajax({
 					url:this.requestUrl,
 					data: this.httpQuery,
 					success:res=>{
-						console.log(res.data.data)
-						var data = res.data.data
+						console.log(res)
+						var data = res.data
 						this.getMoreListSuccess(data)
 					},
 					complete() {
@@ -220,6 +221,8 @@
 				this.searchData = updateData
 				console.log(this.httpQuery)
 				this.openCloseSearch()
+				this.loadingPage = true
+				this.data = []
 				this.loadData()
 			},
 			goto(categoryCode) {

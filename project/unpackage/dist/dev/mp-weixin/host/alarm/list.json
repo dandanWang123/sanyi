@@ -1,0 +1,10 @@
+{
+  "navigationBarTitleText": "告警反馈",
+  "enablePullDownRefresh": true,
+  "usingComponents": {
+    "uni-transition": "/components/uni-transition/uni-transition",
+    "uni-load-more": "/components/uni-load-more/uni-load-more",
+    "search-com": "/pages/commonCom/SearchCom",
+    "skeleton": "/components/xinyi-skeleton/skeleton"
+  }
+}

@@ -9,13 +9,13 @@
 					</div>
 					<div class="my_list_hd_status">
 						<span>
-							{{item.statusName}}中
+							{{item.statusName}}
 						</span>
 					</div>
 				</div>
 				<div class="my_list_content">
 					<div class="my_list_content_img">
-						<image :src="item.imgUrl" mode="aspectFill"></image>
+						<image :src="'http://'+item.imgUrl" mode="aspectFill"></image>
 					</div>
 					<div class="my_list_content_info">
 						<p>物料编码：{{item.material}}</p>
@@ -111,14 +111,11 @@
 						value: '',
 					}
 				],
-				requestUrl:'web/order/app/home/order/page'
+				requestUrl:'app/home/order/page'
 			}
 		},
 		onLoad() {
 			var self = this
-			// uni.showLoading({
-			// 	title:'加载中...'
-			// })
 			this.loadData()
 		},
 		components: {
@@ -141,6 +138,7 @@
 			},
 			onPullDownRefresh() {
 				this.initHttpQuery()
+				this.loadingPage = true
 				this.loadData()
 			},
 			onReachBottom() {
@@ -148,7 +146,6 @@
 				this.getmore()
 			},
 			loadData() {
-				this.loadingPage = false
 				//下拉刷新
 				let self = this;
 				//第一次回去数据
@@ -175,12 +172,13 @@
 				uni.hideLoading()
 				var self = this
 				// 数据请求
-				uni.request({
+				this.ajax({
 					url:this.requestUrl,
 					data: this.httpQuery,
 					success:res=>{
-						console.log(res.data.data)
-						var data = res.data.data
+						console.log(res)
+						this.loadingPage = false
+						var data = res.data
 						this.getListSuccess(data)
 					},
 					complete() {
@@ -213,12 +211,12 @@
 				var self = this
 				this.httpQuery.pageNo++
 				//数据更请求
-				uni.request({
+				this.ajax({
 					url:this.requestUrl,
 					data: this.httpQuery,
 					success:res=>{
-						console.log(res.data.data)
-						var data = res.data.data
+						console.log(res)
+						var data = res.data
 						this.getMoreListSuccess(data)
 					},
 					complete() {
@@ -261,6 +259,8 @@
 				this.searchData = updateData
 				console.log(this.httpQuery)
 				this.openCloseSearch()
+				this.loadingPage = true
+				this.data = []
 				this.loadData()
 			},
 			gotoDeatail(item) {

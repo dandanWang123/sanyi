@@ -1,10 +1,10 @@
 <template>
 	<view class="mapTrack">
 		<div class='mapTrack_title borderBottom_full'>
-			销售订单号：123122313
+			销售订单号：{{salesOrderNo}}
 		</div>
 		<div class="mapTrack_map">
-			<map :style=" 'width: 100%; height: '+ mapHeight +'px'" scale="7" :latitude="latitude" :longitude="longitude" :markers="covers" :polyline="polyline" @updated="pageInit"></map>
+			<map :style=" 'width: 100%; height: '+ mapHeight +'px'" scale="4" :latitude="latitude" :longitude="longitude" :markers="covers" :polyline="polyline" @updated="pageInit"></map>
 		</div>
 		<div class="mapSteps">
 			<div class="mapSteps_wrap">
@@ -19,19 +19,21 @@
 					</template>
 					<!-- <image src="../../static/img/openMapTrack.png"></image> -->
 				</div>
-				<div class="mapSteps_items" v-for="(p, i) in data.point" :key="i" v-if="showPos == true">
-			<!-- 		<image src="../../static/img/location@2x(2).png" v-if="p.nowPoint == true"></image>
-					<image src="../../static/img/location@2x(3).png" v-else></image> -->
-					<image src="../../static/img/location@2x(3).png" v-if="i != 0 && i != (data.point.length-1)"></image>
-					<template v-else>
-						<image src="../../static/img/start.png" v-if="i == 0" style="width: 15px;height: 18px;left: -8px;"></image>
-						<image src="../../static/img/end.png" v-if="i == (data.point.length-1)" style="width: 15px;height: 18px;left: -7px;"></image>
-					</template>
-					<p v-if="i == 0">从【{{p.address}}】出发</p>
-					<p v-if="i == (data.point.length-1) && p.isArrive == true">到达【{{p.address}}】</p>
-					<p v-if="i != 0 && i != (data.point.length-1) && p.isArrive == true">到达{{p.address}},下一站{{data.point[i+1].address}}</p>
-					<p v-if="p.isArrive == false">正前往{{p.address}}</p>
-					<p class="minitxt">{{formatTime(p.time, 'YYYY-MM-DD hh:mm:ss')}}</p>
+				<div class="mapSteps_group">
+					<div class="mapSteps_items" v-for="(p, i) in covers" :key="i" v-if="showPos == true">
+					<!-- 		<image src="../../static/img/location@2x(2).png" v-if="p.nowPoint == true"></image>
+							<image src="../../static/img/location@2x(3).png" v-else></image> -->
+							<image src="../../static/img/location@2x(3).png" v-if="i != 0 && i != (covers.length-1)"></image>
+							<template v-else>
+								<image src="../../static/img/start.png" v-if="i == 0" style="width: 15px;height: 18px;left: -8px;"></image>
+								<image src="../../static/img/end.png" v-if="i == (covers.length-1)" style="width: 15px;height: 18px;left: -7px;"></image>
+							</template>
+							<p v-if="i == 0">从【{{p.address}}】出发</p>
+							<p v-if="i != 0 && i != (covers.length-1)">本站【{{p.address}}】,下一站【{{covers[i+1].address}}】</p>
+							<p v-if="i == (covers.length-1) && isEnd != 0 ">到达终点【{{p.address}}】</p>
+							<p v-if="i == (covers.length-1) && isEnd == 0 ">正前往终点【{{p.address}}】</p>
+							<p class="minitxt">{{p.time}}</p>
+						</div>
 				</div>
 			</div>
 		</div>
@@ -40,6 +42,11 @@
 
 <script>
 	export default {
+		onLoad(option) {
+			this.salesOrderNo = option.salesOrderNo
+			this.parmasId = option.id
+			this.getData()
+		},
 		onShow() {
 			var self = this
 			uni.showLoading({
@@ -62,130 +69,149 @@
 		},
 		data() {
 			return {
+				salesOrderNo: '',
 				pageShow:false,
 				showPos:false,
 				mapHeight: 0,
 				latitude: 32.008076,
 				longitude: 118.850098,
-				covers:[
-					{
-						latitude: 31.825065,
-						longitude: 117.232361,
-						iconPath: '../../static/img/sPoint.png'
-					},
-					{
-						latitude: 31.334871,
-						longitude: 118.454590,
-						iconPath: '../../static/img/pPoint.png'
-					},
-					{
-						latitude: 32.008076,
-						longitude: 118.850098,
-						iconPath: '../../static/img/pPoint.png'
-					},
-					{
-						latitude: 32.379961,
-						longitude: 119.421387,
-						iconPath: '../../static/img/pPoint.png'
-					},
-					{
-						latitude: 32.694866,
-						longitude: 119.904785,
-						iconPath: '../../static/img/pPoint.png'
-					},
-					{
-						latitude: 33.302986,
-						longitude: 120.212402,
-						iconPath: '../../static/img/ePoint.png'
-					}
-				],
-				polyline:[{
-					points:[{
-						latitude: 31.825065,
-						longitude: 117.232361
-					},{
-						latitude: 31.334871,
-						longitude: 118.454590
-					},{
-						latitude: 32.008076,
-						longitude: 118.850098
-					},{
-						latitude: 32.379961,
-						longitude: 119.421387
-					},{
-						latitude: 32.694866,
-						longitude: 119.904785
-					}],
-					color: '#40B4CE',
-					width: 3
-				},{
-					points:[{
-						latitude: 32.694866,
-						longitude: 119.904785
-					},{
-						latitude: 33.302986,
-						longitude: 120.212402
-					}],
-					dottedLine:true,
-					color: '#F05A43',
-					width: 3
-				}],
+				covers:[],
+				polyline:[],
 				data:{
-					isArrive:false,
-					point:[
-						{
-							address: '安徽合肥',
-							nowPoint: false,
-							isArrive: true,
-							time: 1598769999000,
-							latitude: 31.825065,
-							longitude: 117.232361
-						},
-						{
-							address: '安徽芜湖',
-							nowPoint: false,
-							isArrive: true,
-							time: 1598769999000,
-							latitude: 31.334871,
-							longitude: 118.454590
-						},
-						{
-							address: '江苏南京',
-							nowPoint: false,
-							isArrive: true,
-							time: 1598769999000,
-							latitude: 32.008076,
-							longitude: 118.850098
-						},
-						{
-							address: '江苏扬州',
-							nowPoint: false,
-							isArrive: true,
-							time: 1598769999000,
-							latitude: 32.379961,
-							longitude: 119.421387
-						},
-						{
-							address: '江苏泰州',
-							nowPoint: true,
-							isArrive: true,
-							time: 1598779999000,
-							latitude: 32.694866,
-							longitude: 119.904785
-						},
-						{
-							address: '江苏盐城',
-							nowPoint: false,
-							isArrive: false,
-							time: 1598789999000,
-							latitude: 33.302986,
-							longitude: 120.212402
-						}
-					]
-				}
+					point:[]
+				},
+				startAddress: '',
+				startLocation: {},
+				endAddress: '',
+				endLocation: {},
+				isEnd: '',
+				points: [],
+				parmasId: ''
 			}
 		},
 		methods: {
+			getData() {
+				this.ajax({
+					url:'tms/home/order/getTraList/'+ this.parmasId,
+					data: {},
+					success:res=>{
+						console.log(res)
+						if (res.code == 0) {
+							this.getDataSuccess(res.data)
+						}
+					},
+					complete() {
+						uni.hideLoading()
+					}
+				})
+			},
+			getDataSuccess(data) {
+				var self = this
+				this.isEnd = data.isEnd
+				this.startAddress = data.thdz
+				this.endAddress = data.shdz
+				data.traList.forEach(item => {
+					self.points.push({
+						latitude:item.lat,
+						longitude:item.lon,
+						time:item.gjdate,
+						address:item.address
+					})
+				})
+				//取中间点做为地图展示中心
+				this.latitude = data.traList[parseInt(data.traList.length/2)].lat
+				this.longitude = data.traList[parseInt(data.traList.length/2)].lon
+				
+				this.addressToloc(this.startAddress, 1)
+				this.addressToloc(this.endAddress, 2)
+			},
+			addressToloc(address,type) {
+				//逆解析坐标
+				var self = this
+				uni.request({
+					url:'https://restapi.amap.com/v3/geocode/geo',
+					data: {
+						key: '9957725b2462e3d0e64b42c6a8e08ca3', //自己的高德地图key
+						address,
+					},
+					success:res=>{
+						console.log(res)
+						var data =  res.data
+						if( data.status == 1 ) {
+							//成功
+							var latitude = data.geocodes[0].location.split(",")[1]
+							var longitude = data.geocodes[0].location.split(",")[0]
+							var location = {
+								latitude,
+								longitude
+							}
+							if(type == 1){ 
+								self.startLocation = location
+								self.startLocation.address = self.startAddress
+								self.time = ''
+							}
+							if(type == 2){ 
+								self.endLocation = location
+								self.endLocation.address = self.endAddress,
+								self.time = ''
+							}
+							console.log(location)
+							self.addressTolocSuccess()
+						}else {
+							//失败
+							self.httpErr(data.info)
+						}
+					},
+					complete() {
+						uni.hideLoading()
+					}
+				})
+			},
+			addressTolocSuccess() {
+				// 逆解析成功处理数据
+				var lines = []
+				var lines1= []
+				var lines2 = []
+				var passPoints = JSON.parse(JSON.stringify(this.points))
+				passPoints.forEach(item => { 
+					item.iconPath = '../../static/img/pPoint.png'
+				})			
+				this.startLocation.iconPath = '../../static/img/sPoint.png'
+				this.endLocation.iconPath = '../../static/img/ePoint.png'
+				lines[0] = this.startLocation
+				lines1[0] = this.startLocation
+				lines = lines.concat(passPoints)
+				lines1 = lines1.concat(passPoints)
+				lines = lines.concat(this.endLocation)
+				lines2 = [passPoints[passPoints.length-1],this.endLocation]
+				this.covers = lines
+				if (this.isEnd == 0) {
+					//未到达，此时需要取最后一个点和终点做虚线
+					this.polyline = [{
+						color: '#40B4CE',
+						width: 3
+					},{
+						dottedLine:true,
+						color: '#F05A43',
+						width: 3
+					}]
+					this.polyline[0].points = lines1
+					this.polyline[1].points = lines2
+				}else {
+					//已到达，全部用实线连接
+					this.polyline = [{
+						color: '#40B4CE',
+						width: 3
+					}]
+					this.polyline[0].points = lines
+				}
+			},
+			httpErr(msg) {
+				uni.showToast({
+					title: msg,
+					duration: 1000
+				})
+			},
 			pageInit() {
 				uni.hideLoading()
 				this.pageShow = true
@@ -240,9 +266,15 @@
 	border-top-right-radius: 10px;
 	box-shadow:0px 5px 10px #A0A0A0;
 	box-sizing: border-box;
-	padding-left: 46rpx;
+	padding-left: 30rpx;
 	padding-top: 30rpx;
 	padding-right: 30rpx;
+}
+.mapSteps_group {
+	max-height: 700rpx;
+	overflow: auto;
+	padding-left: 9px;
+	box-sizing: border-box;
 }
 .showPosTiggerimg{
 	padding-top: 10rpx;

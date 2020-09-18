@@ -12,15 +12,15 @@
 					<div class="my_list_hd_txt">
 						主机设备号：{{item.sernr}}
 					</div>
-				<!-- 	<div class="my_list_hd_status">
+					<div class="my_list_hd_status" :class="{ 'grayStatus': item.kdauf=='' }">
 						<span>
-							{{item.lbbsaStr}}
+							{{item.kdauf | statusFilter}}
 						</span>
-					</div> -->
+					</div>
 				</div>
 				<div class="my_list_content">
 					<div class="my_list_content_info fullWidth">
-						<p>订单销售号：{{item.kaduf}}</p>
+						<p>订单销售号：{{item.kdauf}}</p>
 						<p>物料编号：{{item.matnr}}</p>
 						<p>物料描述：{{item.matkx}}</p>
 						<p>库存状态：{{item.lbbsaStr}}</p>
@@ -36,18 +36,18 @@
 					<div class="my_list_hd_txt">
 						主机设备号：{{item.sernr}}
 					</div>
-			<!-- 		<div class="my_list_hd_status">
+					<div class="my_list_hd_status" :class="{ 'grayStatus': item.kdauf=='' }">
 						<span>
-							{{item.lbbsaStr}}
+							{{item.kdauf | statusFilter}}
 						</span>
-					</div> -->
+					</div>
 				</div>
 				<div class="my_list_content">
 					<div class="my_list_content_info fullWidth">
 						<p>生产订单号：{{item.aufnr}}</p>
-						<p>销售单号：{{item.kaduf}}</p>
+						<p>销售单号：{{item.kdauf}}</p>
 						<p>物料编号：{{item.matnr}}</p>
-						<p>物料描述：{{item.matkx}}</p>
+						<p>物料描述：{{item.maktx}}</p>
 						<p>工厂&库存地点：{{item.factoryName}}&{{item.lgort}}</p>
 						<p>计划开始日期：{{ formatTime(item.gstrsStr, 'YYYY-MM-DD')}}</p>
 						<p>计划结束日期：{{ formatTime(item.gltrsStr, 'YYYY-MM-DD')}}</p>
@@ -114,20 +114,20 @@
 						index: 0,
 						options: getApp().globalData.lbbsaOption
 					}
-					// ,
-					// {
-					// 	queryName: 'bindingType',
-					// 	type: 'radio',
-					// 	options: [{
-					// 		value: '1',
-					// 		name: '绑定'
-					// 	},{
-					// 		value: '2',
-					// 		name: '未绑定'
-					// 	}],
-					// 	value: '',
-					// 	current: ''
-					// }
+					,
+					{
+						queryName: 'bindingType',
+						type: 'radio',
+						options: [{
+							value: '1',
+							name: '绑定'
+						},{
+							value: '2',
+							name: '未绑定'
+						}],
+						value: '',
+						current: ''
+					}
 					]
 	var httpQuery1 = {
 					pageNo: 1,
@@ -178,20 +178,20 @@
 						placeholder: '请输入所在工厂',
 						value: '',
 					}
-					// ,
-					// {
-					// 	queryName: 'bindingType',
-					// 	type: 'radio',
-					// 	options: [{
-					// 		value: '1',
-					// 		name: '绑定'
-					// 	},{
-					// 		value: '2',
-					// 		name: '未绑定'
-					// 	}],
-					// 	value: '',
-					// 	current: ''
-					// }
+					,
+					{
+						queryName: 'bindingType',
+						type: 'radio',
+						options: [{
+							value: '1',
+							name: '绑定'
+						},{
+							value: '2',
+							name: '未绑定'
+						}],
+						value: '',
+						current: ''
+					}
 				]
 	var httpQuery2 = {
 					pageNo: 1,
@@ -210,10 +210,10 @@
 			return {
 				tabArr:[{
 					title:'库存',
-					requestUrl: 'web/order/app/home/host/stock/page'
+					requestUrl: 'app/home/host/stock/page'
 				},{
 					title:'在制',
-					requestUrl: 'web/order/app/home/host/under/construction/page'
+					requestUrl: 'app/home/host/under/construction/page'
 				}],
 				tabIndex: 0,
 				loadingPage: true,
@@ -232,7 +232,7 @@
 				categoryCode: '',
 				evePageLen: "", //后台每页返回数据的长度，用来判断是否需要请求更多
 				searchData: [],
-				requestUrl:'web/order/app/home/host/stock/page'
+				requestUrl:'app/home/host/stock/page'
 			}
 		},
 		onLoad(option) {
@@ -272,6 +272,7 @@
 			},
 			onPullDownRefresh() {
 				this.initHttpQuery()
+				this.loadingPage = true
 				this.loadData()
 			},
 			onReachBottom() {
@@ -293,10 +294,11 @@
 					this.httpQuery.category = this.categoryCode
 				}
 				this.requestUrl = requestUrl
+				this.loadingPage = true
+				this.data = []
 				this.loadData()
 			},
 			loadData() {
-				this.loadingPage = false
 				//下拉刷新
 				let self = this;
 				//第一次回去数据
@@ -323,12 +325,13 @@
 				uni.hideLoading()
 				var self = this
 				// 数据请求
-				uni.request({
+				this.ajax({
 					url:this.requestUrl,
 					data: this.httpQuery,
 					success:res=>{
-						console.log(res.data.data)
-						var data = res.data.data
+						console.log(res)
+						var data = res.data
+						this.loadingPage = false
 						this.getListSuccess(data)
 					},
 					complete() {
@@ -362,12 +365,12 @@
 				var self = this
 				this.httpQuery.pageNo++
 				//数据更请求
-				uni.request({
+				this.ajax({
 					url:this.requestUrl,
 					data: this.httpQuery,
 					success:res=>{
-						console.log(res.data.data)
-						var data = res.data.data
+						console.log(res)
+						var data = res.data
 						this.getMoreListSuccess(data)
 					},
 					complete() {
@@ -409,15 +412,18 @@
 				}
 				this.searchData = updateData
 				this.openCloseSearch()
+				this.loadingPage = true
+				this.data = []
 				this.loadData()
 			}
 		},
 		filters:{
 			statusFilter(val) {
-				const statusMap = {
-				    1: '已绑定'
+				var res = '已绑定'
+				if (val == '') {
+					res = '未绑定'
 				}
-				return statusMap[val]
+				return res
 			}
 		}
 	}

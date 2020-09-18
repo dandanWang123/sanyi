@@ -1,0 +1,1 @@
+<view class="index"><image src="../static/img/login.jpg" mode="widthFix"></image><block wx:if="{{hasunionid==false}}"><button class="my_button" type="primary" open-type="getUserInfo" data-event-opts="{{[['getuserinfo',[['bindGetUserInfo',['$event']]]]]}}" bindgetuserinfo="__e">立即进入</button></block></view>

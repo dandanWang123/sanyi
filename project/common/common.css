@@ -116,7 +116,7 @@
 .my_list_hd>view  {
 	font-size: 17px;
 	line-height: 17px;
-	max-width: 80%;
+	max-width: 75%;
 	overflow: hidden;
 	text-overflow:ellipsis;
 	white-space: nowrap;
@@ -327,7 +327,7 @@
 	position: relative;
 }
 .mapSteps_items>p {
-	line-height: 14px;
+	line-height: 18px;
 	margin-bottom: 8px;
 }
 .mapSteps_items>p.minitxt {
@@ -375,6 +375,7 @@
 }
 .cell.top .title{
 	font-size: 17px;
+	max-width: 75%;
 }
 .cell.top::after {
 	position: absolute;
@@ -392,7 +393,6 @@
 }
 .cell .status{
 	background: #67BF3C;
-	width: 50px;
 	color: #fff;
 	border-radius: 3px;
 	text-align: center;
@@ -400,6 +400,8 @@
 	height: 24px;
 	font-size: 12px;
 	margin-top: 3px;
+	padding: 0 8px;
+	box-sizing: border-box;
 }
 
 .btn-box{
@@ -467,6 +469,7 @@
 	width: 100%;
 	margin-left: 16px;
 	overflow: auto;
+	padding-top: 16px;
 }
 .process .right .title{
 	padding: 10px;
@@ -477,20 +480,52 @@
 	padding-right: 16px;
 }
 .process .right .des{
-	padding: 10px 15px;
+	padding: 5px 15px 2px 15px;
 	position: relative;
-	border-radius: 3px;
+	border-radius: 4px;
 	font-size: 13px;
 	color: #888;
 	background: #F5F5F5;
 	margin-top: 5px;
+	margin-bottom: 10px;
+	border: 1px solid #e1e1e1;
 
 }
+.process .des>div.dashed{
+	border-bottom: 1px dashed #E1E1E1;
+}
+.process .des>div.dashed:last-child{
+	border-bottom: none;
+}
 .process .des>div{
-	line-height: 23px;
+	padding: 8px 0;
+}
+.process .right .status{
+	margin-right: 10px;
+}
+.process .right .name{
+	display: flex;
+	align-items: center;
+	margin-bottom: 3px;
+
+}
+.process .right .txt{
+	margin-top: 5px;
+	color: #888;
+}
+.process .right .name span{
+	margin-top: 3px;
+}
+.process .right .date{
+	display: flex;
+	justify-content: space-between;
+}
+.process .right .link{
+	color: #5B82F9;
+	text-decoration: underline;
 }
 .process .right .item-title{
-	font-weight: 500;
+	font-weight: 600;
 	font-size: 14px;
 	color: #333;
 	margin-bottom: 3px;
@@ -519,4 +554,20 @@
 	position: absolute;
 	left: -3.5px;
 	top: 29px;
+}
+.btn.status{
+	width: 58px;
+	color: #fff;
+	border-radius: 3px;
+	text-align: center;
+	line-height: 24px;
+	height: 24px;
+	font-size: 12px;
+	margin-top: 3px;
+}
+.btn.status.val1{
+	background: #67BF3C;
+}
+.btn.status.val2{
+	background: #A4AAB8;
 }

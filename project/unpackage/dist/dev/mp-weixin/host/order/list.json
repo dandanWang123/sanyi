@@ -1,0 +1,10 @@
+{
+  "navigationBarTitleText": "订单查询",
+  "enablePullDownRefresh": true,
+  "onReachBottomDistance": 20,
+  "usingComponents": {
+    "uni-load-more": "/components/uni-load-more/uni-load-more",
+    "search-com": "/pages/commonCom/SearchCom",
+    "skeleton": "/components/xinyi-skeleton/skeleton"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "navigationBarTitleText": "告警反馈记录",
+  "usingComponents": {
+    "uni-transition": "/components/uni-transition/uni-transition",
+    "search-com": "/pages/commonCom/SearchCom",
+    "uni-load-more": "/components/uni-load-more/uni-load-more",
+    "skeleton": "/components/xinyi-skeleton/skeleton"
+  }
+}

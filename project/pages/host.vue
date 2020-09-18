@@ -39,11 +39,13 @@
 			}
 		},
 		onLoad() {
-			uni.showLoading({
-				title:'加载中',
-				mask:true
-			})
+			// uni.showLoading({
+			// 	title:'加载中',
+			// 	mask:true
+			// })
 			this.getData()
+			//获取字典
+			this.getDictHttp('dict/data/getListByDictType', 'sales_area')
 		},
 		onShow() {
 			
@@ -51,23 +53,38 @@
 		methods: {
 			getData() {
 				var self = this
-				uni.request({
-					url:'web/order/app/home/index',
+				this.ajax({
+					url:'app/home/index',
 					data: {
 						type: 1
 					},
 					success:res=>{
-						console.log(res.data.data)
-						var data = res.data.data
-						if (res.data.code == 0) {
+						console.log(res)
+						var data = res.data
+						if (res.code == 0) {
 							// 成功
 							self.resSuccess(data)
 						}
 					},
-					complete() {
-						uni.hideLoading()
-					}
+					showLoading:true
 				})
+				// uni.request({
+				// 	url:'web/order/app/home/index',
+				// 	data: {
+				// 		type: 1
+				// 	},
+				// 	success:res=>{
+				// 		console.log(res.data.data)
+				// 		var data = res.data.data
+				// 		if (res.data.code == 0) {
+				// 			// 成功
+				// 			self.resSuccess(data)
+				// 		}
+				// 	},
+				// 	complete() {
+				// 		uni.hideLoading()
+				// 	}
+				// })
 			},
 			resSuccess(data) {
 				var self = this
@@ -89,6 +106,32 @@
 				uni.navigateTo({
 				    url: '/pages/chart?type='+type
 				})
+			},
+			getDictHttp(dictUrl, dictType) {
+				var self = this
+				this.ajax({
+					url: dictUrl,
+					data: {
+						dictType
+					},
+					success:res=>{
+						console.log(res)
+						if(res.code == 0) {
+							//成功
+							self.dicHttpSuccess(res.data,'sales_area_options')
+						}
+					}
+				})
+			},
+			dicHttpSuccess(data,options) {
+				this.$scope.globalData[options] = []
+				data.forEach(item => {
+					this.$scope.globalData[options].push({
+						value: item.dictValue,
+						name: item.dictLabel
+					})
+				})
+				console.log(this.$scope.globalData[options])
 			}
 		}
 	}

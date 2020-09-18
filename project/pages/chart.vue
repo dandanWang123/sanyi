@@ -51,14 +51,14 @@
 		methods: {
 			getServerData(){
 				var self = this
-				uni.request({
-					url: 'web/order/app/home/detail',
+				this.ajax({
+					url: 'app/home/detail',
 					data:{
 						type: this.type
 					},
 					success: function(res) {
-						console.log(res.data.data)
-						var data = res.data.data
+						console.log(res)
+						var data = res.data
 						let ColumnColumn = {}
 						//这里我后台返回的是数组，所以用等于，如果您后台返回的是单条数据，需要push进去
 						var categories = []
